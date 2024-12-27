@@ -26,7 +26,7 @@ class WaterConsumption extends StatefulWidget {
 
 class _WaterConsumptionState extends State<WaterConsumption> {
   final ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
-  String apiKey = 'AIzaSyB3zEf0Ml6hy0dL2F18GBhuZ3G7T4XFdFk';
+  String apiKey = '';
 
   /// Generates water consumption data for the chart.
   List<_ConsumptionData> _generateConsumptionData() {
@@ -142,8 +142,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
         markerSettings: const MarkerSettings(isVisible: true),
         dataLabelSettings: const DataLabelSettings(isVisible: true),
         xValueMapper: (_ConsumptionData data, int index) => DateTime(data.year),
-        yValueMapper: (_ConsumptionData data, int index) =>
-            data.consumptionValue,
+        yValueMapper: (_ConsumptionData data, int index) => data.consumption,
         onRendererCreated:
             (ChartSeriesController<_ConsumptionData, DateTime> controller) {
           _chartSeriesController = controller;
@@ -173,7 +172,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
               final _ConsumptionData consumptionData =
                   _consumptionData[tooltipArgs.pointIndex!.toInt()];
               tooltipArgs.text =
-                  'X: ${consumptionData.year}\nY: ${consumptionData.consumptionValue.toInt()}';
+                  'X: ${consumptionData.year}\nY: ${consumptionData.consumption.toInt()}';
             }
           },
           onActualRangeChanged: (ActualRangeChangedArgs rangeChangedArgs) {
@@ -183,10 +182,10 @@ class _WaterConsumptionState extends State<WaterConsumption> {
               rangeChangedArgs.visibleMax = xMaximum?.millisecondsSinceEpoch;
             } else {
               yMinimum = _consumptionData
-                  .map((_ConsumptionData data) => data.consumptionValue)
+                  .map((_ConsumptionData data) => data.consumption)
                   .reduce((double a, double b) => a < b ? a : b);
               yMaximum = _consumptionData
-                  .map((_ConsumptionData data) => data.consumptionValue)
+                  .map((_ConsumptionData data) => data.consumption)
                   .reduce((double a, double b) => a > b ? a : b);
             }
           },
@@ -209,13 +208,41 @@ class _WaterConsumptionState extends State<WaterConsumption> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: _CustomAIButton(
-        label: 'AI',
         onPressed: () async {
           if (apiKey.isNotEmpty) {
             final String prompt = _generatePrompt();
             await _sendAIChatMessage(
               prompt,
               apiKey,
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  elevation: 1.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'API Key is required.',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ),
+                  content: const Text(
+                      'Kindly provide the API Key to predict the future data trend using AI.'),
+                );
+              },
             );
           }
         },
@@ -242,7 +269,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
     }
     final String reversedData =
         _consumptionData.reversed.map((_ConsumptionData data) {
-      return '${data.year}: ${data.consumptionValue}: ${data.population}';
+      return '${data.year}: ${data.consumption}: ${data.population}';
     }).join('\n');
 
     String prompt = '''
@@ -265,7 +292,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
     try {
       final GenerativeModel model = GenerativeModel(
         model: 'gemini-1.5-flash-latest',
-        apiKey: apiKey,
+        apiKey: apiKey, // Replace your api key here to predict future data.
       );
       final ChatSession chat = model.startChat();
 
@@ -286,7 +313,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
   List<_ConsumptionData> _convertAIResponseToChartData(String? data) {
     if (data == null || data.isEmpty) return [];
 
-    List<_ConsumptionData> consumptionData = [];
+    List<_ConsumptionData> aiConsumptionData = [];
 
     final List<String> pairs = data.split('\n');
 
@@ -295,12 +322,12 @@ class _WaterConsumptionState extends State<WaterConsumption> {
       if (parts.length == 2) {
         final int year = int.parse(parts[0].trim());
         final double consumption = double.parse(parts[1].trim());
-        consumptionData
+        aiConsumptionData
             .add(_ConsumptionData(year, consumption, isPredictedData: true));
       }
     }
 
-    return consumptionData;
+    return aiConsumptionData;
   }
 
   /// Updates the chart data with a delay for animation effect.
@@ -308,7 +335,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
     _setLoading(false);
     for (final _ConsumptionData item in value) {
       await Future.delayed(
-        const Duration(milliseconds: 800),
+        const Duration(milliseconds: 300),
         () {
           _consumptionData.add(item);
           _chartSeriesController.updateDataSource(
@@ -381,11 +408,9 @@ class _WaterConsumptionState extends State<WaterConsumption> {
 
 class _CustomAIButton extends StatefulWidget {
   final VoidCallback onPressed;
-  final String label;
 
   const _CustomAIButton({
     required this.onPressed,
-    required this.label,
   });
 
   @override
@@ -474,10 +499,10 @@ class _CustomAIButtonState extends State<_CustomAIButton>
 
 class _ConsumptionData {
   final int year;
-  final double consumptionValue;
+  final double consumption;
   final bool isPredictedData;
   final double? population;
 
-  _ConsumptionData(this.year, this.consumptionValue,
+  _ConsumptionData(this.year, this.consumption,
       {this.isPredictedData = false, this.population});
 }
