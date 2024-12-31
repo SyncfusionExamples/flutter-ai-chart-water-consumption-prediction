@@ -1,10 +1,10 @@
-# Water Consumption Forecasting using Syncfusion Flutter Charts
+# Water Consumption Forecasting using Syncfusion<sup>&reg;</sup> Flutter Charts
 
-This repository contains a sample regarding water consumption forecasting using [SfCartesianChart](https://www.syncfusion.com/flutter-widgets/flutter-charts) widget.
+This repository features a sample on water consumption forecasting by using the [SfCartesianChart](https://www.syncfusion.com/flutter-widgets/flutter-charts) widget combined with [google_generative_ai](https://pub.dev/packages/google_generative_ai) package.
 
-## Syncfusion widgets
+## Syncfusion<sup>&reg;</sup> widgets
 
-This project used the following Syncfusion widget(s):
+This project used the following Syncfusion<sup>&reg;</sup> widget(s):
 
 * [SfCartesianChart](https://www.syncfusion.com/flutter-widgets/flutter-charts)
 
@@ -26,4 +26,4 @@ Refer to the following link to know about system requirements - [System Requirem
 
 ## License
 
-Syncfusion has no liability for any damage or consequence that may arise by using or viewing the samples. The samples are for demonstrative purposes, and if you choose to use or access the samples, you agree to not hold Syncfusion liable, in any form, for any damage that is related to use, for accessing, or viewing the samples. By accessing, viewing, or seeing the samples, you acknowledge and agree Syncfusion’s samples will not allow you seek injunctive relief in any form for any claim related to the sample. If you do not agree to this, do not view, access, utilize, or otherwise do anything with Syncfusion’s samples.
+Syncfusion<sup>&reg;</sup> has no liability for any damage or consequence that may arise by using or viewing the samples. The samples are for demonstrative purposes, and if you choose to use or access the samples, you agree to not hold Syncfusion<sup>&reg;</sup> liable, in any form, for any damage that is related to use, for accessing, or viewing the samples. By accessing, viewing, or seeing the samples, you acknowledge and agree Syncfusion<sup>&reg;</sup> samples will not allow you seek injunctive relief in any form for any claim related to the sample. If you do not agree to this, do not view, access, utilize, or otherwise do anything with Syncfusion<sup>&reg;</sup> samples.

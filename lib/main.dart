@@ -9,7 +9,6 @@ void main() {
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorSchemeSeed: Colors.blue,
         useMaterial3: true,
       ),
       home: const WaterConsumption(),
@@ -25,77 +24,125 @@ class WaterConsumption extends StatefulWidget {
 }
 
 class _WaterConsumptionState extends State<WaterConsumption> {
-  final ValueNotifier<bool> _isLoading = ValueNotifier<bool>(false);
-  String apiKey = '';
+  late List<_WaterConsumptionData> _waterConsumptionData;
+  late ChartSeriesController _chartSeriesController;
+  late TooltipBehavior _tooltipBehavior;
+
+  final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier<bool>(false);
+  final String _apiKey = 'AIzaSyDgk9uFVCPNh3S8xdY7dqhOFwAqbOnrxek';
 
   /// Generates water consumption data for the chart.
-  List<_ConsumptionData> _generateConsumptionData() {
-    return <_ConsumptionData>[
-      _ConsumptionData(1979, 1512.0, population: 7102100),
-      _ConsumptionData(1980, 1506.0, population: 7071639),
-      _ConsumptionData(1981, 1309.0, population: 7089241),
-      _ConsumptionData(1982, 1382.0, population: 7109105),
-      _ConsumptionData(1983, 1424.0, population: 7181224),
-      _ConsumptionData(1984, 1465.0, population: 7234514),
-      _ConsumptionData(1985, 1326.0, population: 7274054),
-      _ConsumptionData(1986, 1351.0, population: 7319246),
-      _ConsumptionData(1987, 1447.0, population: 7342476),
-      _ConsumptionData(1988, 1484.0, population: 7353719),
-      _ConsumptionData(1989, 1402.0, population: 7344175),
-      _ConsumptionData(1990, 1424.0, population: 7335650),
-      _ConsumptionData(1991, 1469.0, population: 7374501),
-      _ConsumptionData(1992, 1369.0, population: 7428944),
-      _ConsumptionData(1993, 1369.0, population: 7506166),
-      _ConsumptionData(1994, 1358.0, population: 7570458),
-      _ConsumptionData(1995, 1326.0, population: 7633040),
-      _ConsumptionData(1996, 1298.0, population: 7697812),
-      _ConsumptionData(1997, 1206.0, population: 7773443),
-      _ConsumptionData(1998, 1220.0, population: 7858259),
-      _ConsumptionData(1999, 1237.0, population: 7947660),
-      _ConsumptionData(2000, 1240.0, population: 8008278),
-      _ConsumptionData(2001, 1184.0, population: 8024963.5),
-      _ConsumptionData(2002, 1136.0, population: 8041649),
-      _ConsumptionData(2003, 1094.0, population: 8058334.5),
-      _ConsumptionData(2004, 1100.0, population: 8075020),
-      _ConsumptionData(2005, 1138.0, population: 8091705.5),
-      _ConsumptionData(2006, 1069.0, population: 8108391),
-      _ConsumptionData(2007, 1114.0, population: 8125076.5),
-      _ConsumptionData(2008, 1098.0, population: 8141762),
-      _ConsumptionData(2009, 1008.0, population: 8158447.5),
-      _ConsumptionData(2010, 1039.0, population: 8175133),
-      _ConsumptionData(2011, 1021.0, population: 8337995),
-      _ConsumptionData(2012, 1009.0, population: 8463949),
-      _ConsumptionData(2013, 1006.0, population: 8565546),
-      _ConsumptionData(2014, 996.0, population: 8655309),
-      _ConsumptionData(2015, 1009.0, population: 8736703),
-      _ConsumptionData(2016, 1002.0, population: 8794605),
-      _ConsumptionData(2017, 990.0, population: 8815448),
-      _ConsumptionData(2018, 1008.0, population: 8826472),
-      _ConsumptionData(2019, 987.0, population: 8824887),
-      _ConsumptionData(2020, 981.0, population: 8804190),
-      _ConsumptionData(2021, 979.0, population: 8467513),
-      _ConsumptionData(2022, 999.0, population: 8335897),
-      _ConsumptionData(2023, 997.0, population: 8825800),
+  List<_WaterConsumptionData> _generateWaterConsumptionData() {
+    return <_WaterConsumptionData>[
+      _WaterConsumptionData(
+        year: 2004,
+        waterConsumptionInGallons: 1100.0,
+        population: 8075020,
+      ),
+      _WaterConsumptionData(
+        year: 2005,
+        waterConsumptionInGallons: 1138.0,
+        population: 8091705.5,
+      ),
+      _WaterConsumptionData(
+        year: 2006,
+        waterConsumptionInGallons: 1069.0,
+        population: 8108391,
+      ),
+      _WaterConsumptionData(
+        year: 2007,
+        waterConsumptionInGallons: 1114.0,
+        population: 8125076.5,
+      ),
+      _WaterConsumptionData(
+        year: 2008,
+        waterConsumptionInGallons: 1098.0,
+        population: 8141762,
+      ),
+      _WaterConsumptionData(
+        year: 2009,
+        waterConsumptionInGallons: 1008.0,
+        population: 8158447.5,
+      ),
+      _WaterConsumptionData(
+        year: 2010,
+        waterConsumptionInGallons: 1039.0,
+        population: 8175133,
+      ),
+      _WaterConsumptionData(
+        year: 2011,
+        waterConsumptionInGallons: 1021.0,
+        population: 8337995,
+      ),
+      _WaterConsumptionData(
+        year: 2012,
+        waterConsumptionInGallons: 1009.0,
+        population: 8463949,
+      ),
+      _WaterConsumptionData(
+        year: 2013,
+        waterConsumptionInGallons: 1006.0,
+        population: 8565546,
+      ),
+      _WaterConsumptionData(
+        year: 2014,
+        waterConsumptionInGallons: 996.0,
+        population: 8655309,
+      ),
+      _WaterConsumptionData(
+        year: 2015,
+        waterConsumptionInGallons: 1009.0,
+        population: 8736703,
+      ),
+      _WaterConsumptionData(
+        year: 2016,
+        waterConsumptionInGallons: 1002.0,
+        population: 8794605,
+      ),
+      _WaterConsumptionData(
+        year: 2017,
+        waterConsumptionInGallons: 990.0,
+        population: 8815448,
+      ),
+      _WaterConsumptionData(
+        year: 2018,
+        waterConsumptionInGallons: 1008.0,
+        population: 8826472,
+      ),
+      _WaterConsumptionData(
+        year: 2019,
+        waterConsumptionInGallons: 987.0,
+        population: 8824887,
+      ),
+      _WaterConsumptionData(
+        year: 2020,
+        waterConsumptionInGallons: 981.0,
+        population: 8804190,
+      ),
+      _WaterConsumptionData(
+        year: 2021,
+        waterConsumptionInGallons: 979.0,
+        population: 8467513,
+      ),
+      _WaterConsumptionData(
+        year: 2022,
+        waterConsumptionInGallons: 999.0,
+        population: 8335897,
+      ),
+      _WaterConsumptionData(
+        year: 2023,
+        waterConsumptionInGallons: 997.0,
+        population: 8825800,
+      ),
     ];
   }
 
   /// Builds the Cartesian chart widget for visualizing the water consumption
   /// in New york with attractive and good looking UI.
   Widget _buildCartesianChart() {
-    double? yMinimum;
-    double? yMaximum;
-    DateTime? xMinimum;
-    DateTime? xMaximum;
-
     DateTimeAxis buildDateTimeAxis() {
       return DateTimeAxis(
         interval: 1,
-        minimum: xMinimum,
-        maximum: xMaximum,
-        maximumLabels: 10,
-        desiredIntervals: 10,
-        autoScrollingDelta: 10,
-        enableAutoIntervalOnZooming: false,
         intervalType: DateTimeIntervalType.years,
         edgeLabelPlacement: EdgeLabelPlacement.shift,
         majorGridLines: const MajorGridLines(width: 0.0),
@@ -115,40 +162,38 @@ class _WaterConsumptionState extends State<WaterConsumption> {
 
     NumericAxis buildNumericAxis() {
       return NumericAxis(
-        interval: 10.0,
-        minimum: yMinimum,
-        maximum: yMaximum,
+        interval: 20.0,
         maximumLabels: 10,
         anchorRangeToVisiblePoints: true,
-        enableAutoIntervalOnZooming: false,
+        rangePadding: ChartRangePadding.additional,
         majorTickLines: const MajorTickLines(width: 0.0),
-        majorGridLines: const MajorGridLines(
-          dashArray: [4.0, 2.0],
-          width: 0.0,
-          color: Colors.red,
-        ),
         title: AxisTitle(
-          text: 'NYC Consumption (million gallons/day)',
+          text: 'NYC Consumption (million gallons per day)',
           textStyle: Theme.of(context).textTheme.titleSmall,
         ),
       );
     }
 
-    SplineSeries<_ConsumptionData, DateTime> buildSplineSeries() {
-      return SplineSeries<_ConsumptionData, DateTime>(
+    SplineSeries<_WaterConsumptionData, DateTime> buildSplineSeries() {
+      return SplineSeries<_WaterConsumptionData, DateTime>(
+        dataSource: _waterConsumptionData,
+        xValueMapper: (_WaterConsumptionData waterConsumptionData, int index) {
+          return DateTime(waterConsumptionData.year);
+        },
+        yValueMapper: (_WaterConsumptionData waterConsumptionData, int index) {
+          return waterConsumptionData.waterConsumptionInGallons;
+        },
         width: 5.0,
-        animationDuration: 800.0,
-        dataSource: _consumptionData,
         markerSettings: const MarkerSettings(isVisible: true),
         dataLabelSettings: const DataLabelSettings(isVisible: true),
-        xValueMapper: (_ConsumptionData data, int index) => DateTime(data.year),
-        yValueMapper: (_ConsumptionData data, int index) => data.consumption,
         onRendererCreated:
-            (ChartSeriesController<_ConsumptionData, DateTime> controller) {
-          _chartSeriesController = controller;
+            (ChartSeriesController<_WaterConsumptionData, DateTime>
+                chartSeriesController) {
+          _chartSeriesController = chartSeriesController;
         },
-        pointColorMapper: (_ConsumptionData data, int index) {
-          return data.isPredictedData
+        pointColorMapper:
+            (_WaterConsumptionData waterConsumptionData, int index) {
+          return waterConsumptionData.isAIPredicted
               ? Colors.lightBlueAccent
               : Colors.blueAccent;
         },
@@ -159,39 +204,24 @@ class _WaterConsumptionState extends State<WaterConsumption> {
       builder: (BuildContext context, BoxConstraints constraints) {
         return SfCartesianChart(
           title: ChartTitle(
-            text: 'Water Consumption Prediction',
+            text: 'Water Consumption Level in New York',
             textStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          zoomPanBehavior: _zoomPanBehavior,
           tooltipBehavior: _tooltipBehavior,
           onTooltipRender: (TooltipArgs tooltipArgs) {
             tooltipArgs.header = '';
             if (tooltipArgs.pointIndex != null) {
-              final _ConsumptionData consumptionData =
-                  _consumptionData[tooltipArgs.pointIndex!.toInt()];
+              final _WaterConsumptionData waterConsumptionData =
+                  _waterConsumptionData[tooltipArgs.pointIndex!.toInt()];
               tooltipArgs.text =
-                  'X: ${consumptionData.year}\nY: ${consumptionData.consumption.toInt()}';
-            }
-          },
-          onActualRangeChanged: (ActualRangeChangedArgs rangeChangedArgs) {
-            if (rangeChangedArgs.orientation == AxisOrientation.horizontal) {
-              xMinimum = DateTime(_consumptionData.first.year);
-              xMaximum = DateTime(_consumptionData.last.year);
-              rangeChangedArgs.visibleMax = xMaximum?.millisecondsSinceEpoch;
-            } else {
-              yMinimum = _consumptionData
-                  .map((_ConsumptionData data) => data.consumption)
-                  .reduce((double a, double b) => a < b ? a : b);
-              yMaximum = _consumptionData
-                  .map((_ConsumptionData data) => data.consumption)
-                  .reduce((double a, double b) => a > b ? a : b);
+                  '''X: ${waterConsumptionData.year}\nY: ${waterConsumptionData.waterConsumptionInGallons.toInt()}''';
             }
           },
           primaryXAxis: buildDateTimeAxis(),
           primaryYAxis: buildNumericAxis(),
-          series: <CartesianSeries<_ConsumptionData, DateTime>>[
+          series: <CartesianSeries<_WaterConsumptionData, DateTime>>[
             buildSplineSeries()
           ],
         );
@@ -200,85 +230,62 @@ class _WaterConsumptionState extends State<WaterConsumption> {
   }
 
   /// Builds the customized AI prediction button.
-  Widget _buildCustomAIButton(BuildContext context) {
-    return Tooltip(
-      message: 'Predicts future trends for next 20 years',
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: _CustomAIButton(
-        onPressed: () async {
-          if (apiKey.isNotEmpty) {
+  Widget _buildAIButton(BuildContext context) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Tooltip(
+        message: 'Predicts future trends from 2024 - 2029',
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: _AIButton(
+          onPressed: () async {
+            if (_apiKey.isEmpty) return;
+
             final String prompt = _generatePrompt();
-            await _sendAIChatMessage(
-              prompt,
-              apiKey,
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  elevation: 1.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'API Key is required.',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      )
-                    ],
-                  ),
-                  content: const Text(
-                      'Kindly provide the API Key to predict the future data trend using AI.'),
-                );
-              },
-            );
-          }
-        },
+            await _sendAIChatMessage(prompt, _apiKey);
+          },
+        ),
       ),
     );
   }
 
-  /// Sets the loading state for asynchronous operations.
-  void _setLoading(bool value) {
-    if (mounted) {
-      _isLoading.value = value;
-    }
-  }
-
   /// Generates the prompt to predict future trend for water consumption
   /// in New York based on historical data and population growth
-  /// for next 20 years.
+  /// for next 05 years.
   String _generatePrompt() {
-    final List<_ConsumptionData> items = <_ConsumptionData>[];
-    final int length = _consumptionData.length - 1;
+    final List<_WaterConsumptionData> items = <_WaterConsumptionData>[];
+    final int length = _waterConsumptionData.length - 1;
 
     for (int index = length; index >= 0; index--) {
-      items.add(_consumptionData[index]);
+      items.add(_waterConsumptionData[index]);
     }
-    final String reversedData =
-        _consumptionData.reversed.map((_ConsumptionData data) {
-      return '${data.year}: ${data.consumption}: ${data.population}';
-    }).join('\n');
+    final String reversedData = _waterConsumptionData.reversed.map(
+      (_WaterConsumptionData data) {
+        return '''${data.year}: ${data.waterConsumptionInGallons}: ${data.population}''';
+      },
+    ).join('\n');
 
     String prompt = '''
-    Predict New York City's water consumption for the next 20 years using historical consumption data (1979-2023) and city population trends as reference points. Your predictions should realistically reflect past trends and fluctuations, avoiding simple patterns like uniform increases, decreases, or irrelevant zig-zag patterns. Consider both historical consumption patterns and population growth when generating predictions. The x-axis corresponds to years, while the y-axis represents water consumption in million gallons per day. Do not provide data values for population but just consider the population too while predicting the future values for water consumption in New York city based on the historical city and water consumption growth. Please ensure that the following conditions are met for each predicted data point:\n\n
+    Predict New York City's water consumption for the next 05 years (2024 - 2029)
+    using the historical consumption data (2004-2023) and city population
+    trends as references. Your predictions should realistically 
+    reflect past trends and fluctuations, avoiding simple patterns like 
+    uniform increases, decreases, or irrelevant zig-zag patterns. 
+    Consider both historical consumption patterns and population growth 
+    when generating predictions. The x-axis represents years, 
+    while the y-axis represents water consumption in million gallons per day.
+    Do not output any data values for population explicitly, but consider 
+    the population growth in your predictions for water consumption
+    in New York city based on historical city and water consumption growth.
+    Ensure each predicted data point meets the following conditions:\n\n
     $reversedData
     ''';
 
-    prompt +=
-        'and Output only the prediction in this format: "yyyy:yValue".  (yValue means consumption data in gallon). No explanations, headers, or additional text needed.\n';
+    prompt += '''Output the predictions only in this format: "yyyy:yValue".
+        (yValue represents consumption data in gallons).
+        Do not include explanations, headers, or any additional text.\n''';
 
     return prompt;
   }
@@ -287,7 +294,10 @@ class _WaterConsumptionState extends State<WaterConsumption> {
   /// Converts the response into chart data.
   /// Update the cartesian chart based on the predicted data.
   Future<void> _sendAIChatMessage(String prompt, String apiKey) async {
-    _setLoading(true);
+    // Sets the loading state for asynchronous operations.
+    if (mounted) {
+      _isLoadingNotifier.value = true;
+    }
 
     try {
       final GenerativeModel model = GenerativeModel(
@@ -295,35 +305,43 @@ class _WaterConsumptionState extends State<WaterConsumption> {
         apiKey: apiKey, // Replace your api key here to predict future data.
       );
       final ChatSession chat = model.startChat();
-
       final GenerateContentResponse response = await chat.sendMessage(
         Content.text(prompt),
       );
 
-      final List<_ConsumptionData> aiRespondedDatas =
+      final List<_WaterConsumptionData> aiRespondedWaterConsumptionEntries =
           _convertAIResponseToChartData(response.text);
 
-      await _updateChartRangeWithDelay(aiRespondedDatas);
+      await _updateChartRangeWithDelay(aiRespondedWaterConsumptionEntries);
     } on Object catch (error) {
-      debugPrint('error => $error');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Some error has been occurred $error'),
+          ),
+        );
+      }
     }
   }
 
   /// Converts AI response into chart data.
-  List<_ConsumptionData> _convertAIResponseToChartData(String? data) {
+  List<_WaterConsumptionData> _convertAIResponseToChartData(String? data) {
     if (data == null || data.isEmpty) return [];
 
-    List<_ConsumptionData> aiConsumptionData = [];
-
+    final List<_WaterConsumptionData> aiConsumptionData = [];
     final List<String> pairs = data.split('\n');
-
     for (final String pair in pairs) {
       final List<String> parts = pair.split(':');
       if (parts.length == 2) {
         final int year = int.parse(parts[0].trim());
         final double consumption = double.parse(parts[1].trim());
-        aiConsumptionData
-            .add(_ConsumptionData(year, consumption, isPredictedData: true));
+        aiConsumptionData.add(
+          _WaterConsumptionData(
+            year: year,
+            waterConsumptionInGallons: consumption,
+            isAIPredicted: true,
+          ),
+        );
       }
     }
 
@@ -331,35 +349,48 @@ class _WaterConsumptionState extends State<WaterConsumption> {
   }
 
   /// Updates the chart data with a delay for animation effect.
-  Future<void> _updateChartRangeWithDelay(List<_ConsumptionData> value) async {
-    _setLoading(false);
-    for (final _ConsumptionData item in value) {
-      await Future.delayed(
-        const Duration(milliseconds: 300),
-        () {
-          _consumptionData.add(item);
-          _chartSeriesController.updateDataSource(
-            addedDataIndexes: <int>[_consumptionData.length - 1],
-          );
-        },
+  Future<void> _updateChartRangeWithDelay(
+      List<_WaterConsumptionData> waterConsumptionDataEntries) async {
+    // Sets the loading state for asynchronous operations.
+    if (mounted) {
+      _isLoadingNotifier.value = false;
+    }
+
+    // Add the first data point without delay.
+    _waterConsumptionData.add(waterConsumptionDataEntries.first);
+    _chartSeriesController.updateDataSource(
+      addedDataIndexes: <int>[_waterConsumptionData.length - 1],
+    );
+
+    // Delay for the rest of the data points.
+    for (int i = 1; i < waterConsumptionDataEntries.length; i++) {
+      await Future.delayed(const Duration(milliseconds: 500));
+      _waterConsumptionData.add(waterConsumptionDataEntries[i]);
+      _chartSeriesController.updateDataSource(
+        addedDataIndexes: <int>[_waterConsumptionData.length - 1],
       );
     }
   }
 
-  late List<_ConsumptionData> _consumptionData;
-  late ChartSeriesController _chartSeriesController;
-  late ZoomPanBehavior _zoomPanBehavior;
-  late TooltipBehavior _tooltipBehavior;
+  /// Builds the circular progress indicator while updating the predicted data.
+  Widget _buildCircularProgressIndicator() {
+    return ValueListenableBuilder(
+      valueListenable: _isLoadingNotifier,
+      builder: (BuildContext context, bool value, Widget? child) {
+        return Visibility(
+          visible: _isLoadingNotifier.value,
+          child: const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
-    _consumptionData = _generateConsumptionData();
+    _waterConsumptionData = _generateWaterConsumptionData();
 
-    _zoomPanBehavior = ZoomPanBehavior(
-      enablePanning: true,
-      enableMouseWheelZooming: true,
-      zoomMode: ZoomMode.x,
-    );
     _tooltipBehavior = TooltipBehavior(
       canShowMarker: false,
       enable: true,
@@ -369,55 +400,40 @@ class _WaterConsumptionState extends State<WaterConsumption> {
 
   @override
   void dispose() {
-    _consumptionData.clear();
+    _waterConsumptionData.clear();
+    _isLoadingNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Stack(
-            children: <Widget>[
-              _buildCartesianChart(),
-              Positioned(
-                top: 0,
-                right: 20.0,
-                child: _buildCustomAIButton(context),
-              ),
-              ValueListenableBuilder(
-                valueListenable: _isLoading,
-                builder: (BuildContext context, bool value, Widget? child) {
-                  return Visibility(
-                    visible: _isLoading.value,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Stack(
+          children: <Widget>[
+            _buildCartesianChart(),
+            _buildAIButton(context),
+            _buildCircularProgressIndicator(),
+          ],
         ),
       ),
     );
   }
 }
 
-class _CustomAIButton extends StatefulWidget {
+class _AIButton extends StatefulWidget {
   final VoidCallback onPressed;
 
-  const _CustomAIButton({
+  const _AIButton({
     required this.onPressed,
   });
 
   @override
-  State<_CustomAIButton> createState() => _CustomAIButtonState();
+  State<_AIButton> createState() => _AIButtonState();
 }
 
-class _CustomAIButtonState extends State<_CustomAIButton>
+class _AIButtonState extends State<_AIButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
@@ -446,47 +462,49 @@ class _CustomAIButtonState extends State<_CustomAIButton>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (context, child) {
+      builder: (BuildContext context, Widget? child) {
         return Transform.translate(
-          offset: Offset(0, _animation.value),
+          offset: Offset(0.0, _animation.value),
           child: IconButton(
             onPressed: widget.onPressed,
             hoverColor: Colors.lightBlueAccent.shade100,
-            icon: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    Colors.lightBlueAccent.shade100,
-                    Colors.lightBlueAccent.shade700,
-                    Colors.transparent,
+            icon: SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: <Color>[
+                      Colors.lightBlueAccent.shade100,
+                      Colors.lightBlueAccent.shade700,
+                      Colors.transparent,
+                    ],
+                    center: const Alignment(0.1, 0.1),
+                    radius: 0.9,
+                  ),
+                  boxShadow: const <BoxShadow>[
+                    BoxShadow(
+                      color: Color.fromARGB(120, 25, 25, 112),
+                      offset: Offset(8.0, 8.0),
+                      blurRadius: 18.0,
+                      spreadRadius: 1.0,
+                    ),
+                    BoxShadow(
+                      color: Color.fromARGB(120, 255, 255, 255),
+                      offset: Offset(-8.0, -8.0),
+                      blurRadius: 18.0,
+                      spreadRadius: 1.0,
+                    ),
                   ],
-                  center: const Alignment(0.1, 0.1),
-                  radius: 0.9,
                 ),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(120, 25, 25, 112),
-                    offset: Offset(8.0, 8.0),
-                    blurRadius: 18.0,
-                    spreadRadius: 1.0,
+                child: Center(
+                  child: Image.asset(
+                    'assets/ai_assist_view.png',
+                    height: 30,
+                    width: 40,
+                    color: const Color.fromARGB(255, 0, 51, 102),
                   ),
-                  BoxShadow(
-                    color: Color.fromARGB(120, 255, 255, 255),
-                    offset: Offset(-8.0, -8.0),
-                    blurRadius: 18.0,
-                    spreadRadius: 1.0,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Image.asset(
-                  'assets/ai_assist_view.png',
-                  height: 30,
-                  width: 40,
-                  color: const Color.fromARGB(255, 0, 51, 102),
                 ),
               ),
             ),
@@ -497,12 +515,16 @@ class _CustomAIButtonState extends State<_CustomAIButton>
   }
 }
 
-class _ConsumptionData {
-  final int year;
-  final double consumption;
-  final bool isPredictedData;
-  final double? population;
+class _WaterConsumptionData {
+  _WaterConsumptionData({
+    required this.year,
+    required this.waterConsumptionInGallons,
+    this.population,
+    this.isAIPredicted = false,
+  });
 
-  _ConsumptionData(this.year, this.consumption,
-      {this.isPredictedData = false, this.population});
+  final int year;
+  final double waterConsumptionInGallons;
+  final double? population;
+  final bool isAIPredicted;
 }

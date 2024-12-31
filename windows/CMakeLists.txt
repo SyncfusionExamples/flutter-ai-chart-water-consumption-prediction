@@ -1,10 +1,10 @@
 # Project-level configuration.
 cmake_minimum_required(VERSION 3.14)
-project(gold_chart_data_ai_sample_sb_new LANGUAGES CXX)
+project(flutter_ai_chart_water_consumption_prediction LANGUAGES CXX)
 
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
-set(BINARY_NAME "gold_chart_data_ai_sample_sb_new")
+set(BINARY_NAME "flutter_ai_chart_water_consumption_prediction")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.

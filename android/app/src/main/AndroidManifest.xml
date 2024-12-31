@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="gold_chart_data_ai_sample_sb_new"
+        android:label="flutter_ai_chart_water_consumption_prediction"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

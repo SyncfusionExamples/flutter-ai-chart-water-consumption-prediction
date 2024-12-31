@@ -1,6 +1,6 @@
 {
-    "name": "gold_chart_data_ai_sample_sb_new",
-    "short_name": "gold_chart_data_ai_sample_sb_new",
+    "name": "flutter_ai_chart_water_consumption_prediction",
+    "short_name": "flutter_ai_chart_water_consumption_prediction",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
