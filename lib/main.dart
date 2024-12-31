@@ -29,7 +29,7 @@ class _WaterConsumptionState extends State<WaterConsumption> {
   late TooltipBehavior _tooltipBehavior;
 
   final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier<bool>(false);
-  final String _apiKey = 'AIzaSyDgk9uFVCPNh3S8xdY7dqhOFwAqbOnrxek';
+  final String _apiKey = '';
 
   /// Generates water consumption data for the chart.
   List<_WaterConsumptionData> _generateWaterConsumptionData() {
