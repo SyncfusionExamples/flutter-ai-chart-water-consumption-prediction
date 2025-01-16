@@ -2,6 +2,8 @@
 
 This repository features a sample on water consumption forecasting by using the [SfCartesianChart](https://www.syncfusion.com/flutter-widgets/flutter-charts) widget combined with [google_generative_ai](https://pub.dev/packages/google_generative_ai) package.
 
+Please refer through this Blog [link](https://www.syncfusion.com/blogs/post/ai-powered-flutter-spline-chart).
+
 ## Syncfusion<sup>&reg;</sup> widgets
 
 This project used the following Syncfusion<sup>&reg;</sup> widget(s):
